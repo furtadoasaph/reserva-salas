@@ -1,0 +1,13 @@
+diff --git a/src/Agenda.java b/src/Agenda.java
+index f0b7ce5..689bff8 100644
+--- a/src/Agenda.java
++++ b/src/Agenda.java
+@@ -31,7 +31,7 @@ public class Agenda {
+         String nome = sala.trim().toUpperCase(Locale.ROOT);
+         for (Reserva anterior : reservas) {
+             if (nome.equals(anterior.sala) && data.equals(anterior.data)
+-                    && inicio.isBefore(anterior.fim) && anterior.inicio.isBefore(fim)) {
++                    && !inicio.isBefore(anterior.inicio) && inicio.isBefore(anterior.fim)) {
+                 return Resultado.CONFLITO;
+             }
+         }

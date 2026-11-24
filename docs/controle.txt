@@ -1,0 +1,8 @@
+OK | Primeira reserva | ACEITA
+OK | Sobreposição parcial | CONFLITO
+OK | Começa no fim da anterior | ACEITA
+OK | Outra sala | ACEITA
+OK | Outro dia | ACEITA
+Exception in thread "main" java.lang.AssertionError: Envolve a reserva inteira | esperado CONFLITO, obtido ACEITA
+	at TestesIniciais.verificar(TestesIniciais.java:11)
+	at TestesRevisao.main(TestesRevisao.java:9)
