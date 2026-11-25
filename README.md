@@ -55,3 +55,7 @@ Em uma cópia separada da pasta extraída, execute `git apply docs/variante.patc
 1. **Pessoa 1 — problema e primeira decisão.** “Duas turmas querem usar a mesma sala. O grupo precisa decidir até uma coisa aparentemente simples: se uma aula acaba às três, a outra pode começar às três? Neste cenário, pode. Essa decisão vira uma regra escrita antes de o agente programar.” Abra a tarefa e mostre o plano.
 2. **Pessoa 2 — implementação.** “O agente recebeu a tarefa de comparar sala, dia e horário. Vamos reservar das duas às três, tentar reservar da uma às quatro e, por fim, tentar das três às quatro.” Execute o exemplo e peça à turma que preveja a última resposta.
 3. **Pessoa 3 — conferência e segunda decisão.** “Os cinco testes iniciais passaram até numa cópia que continha um erro. O pedido da uma às quatro revelou a falha porque envolve toda a reserva existente. É esse tipo de evidência que o revisor precisa considerar antes de aprovar a integração.” Mostre os dois registros de execução e identifique o defeito deliberado e as aprovações assumidas.
+
+Revisão do grupo
+Em 24/11/26 , Asaph ferreira testou a sala A, já reservada das 14h às 15h. Ao tentar reservar das 13h às 16h, o sistema mostrou CONFLITO. Ao tentar reservar das 15h às 16h, mostrou ACEITO. Com base nisso, o grupo decidiu aprovar a regra.
+
