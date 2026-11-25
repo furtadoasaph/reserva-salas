@@ -26,7 +26,7 @@ sair
 ```
 
 ## Método e resultados
-A unidade de estudo é uma alteração em um repositório Java. O [plano da tarefa](docs/tarefa-e-plano.md) documenta o escopo e a primeira decisão. O agente produziu a implementação e cinco testes iniciais. Uma bateria complementar de sete testes representa a etapa de revisão. O agente também preparou essa bateria. A revisão humana foi assumida para o cenário, sem coleta de observações de revisores.
+O [plano da tarefa](docs/tarefa-e-plano.md) descreve o escopo e a etapa de planejamento do fluxo HITL. O agente implementou a regra e preparou duas baterias automatizadas, com cinco e sete testes. Na revisão da versão entregue, Asaph testou a regra em nome da equipe e registrou a decisão no repositório.
 
 | Versão executada | Bateria inicial | Bateria de revisão |
 |---|---|---|
@@ -37,16 +37,48 @@ Na versão entregue, há conflito quando o novo início antecede o fim existente
 
 Para verificar a utilidade dos testes, alteramos uma cópia para que verificasse apenas se o início do novo pedido caía dentro da reserva anterior. Ao pedir das 13h às 16h, o início parece livre, embora a sala esteja ocupada das 14h às 15h. A primeira bateria deixou esse defeito passar. A segunda detectou exatamente a divergência esperada. Consulte as saídas da [versão entregue](docs/execucao.txt) e da [variante com defeito](docs/controle.txt).
 
-**Interpretação.** Neste exemplo, escolher um cenário adicional mudou a capacidade de detectar um erro. O ensaio usa uma única tarefa e um defeito artificial. Não medimos produtividade, tempo de revisão ou desempenho de revisores humanos.
+## Revisão feita pela equipe
 
-## Segunda decisão e histórico
-Decisão final assumida no cenário: aprovar a integração da implementação em que as duas baterias passaram. A variante com defeito ficou restrita ao experimento. O histórico Git local registra plano, implementação, conferência e integração. Para inspecioná-lo, execute:
+Em 24/11/2026, Asaph Ferreira Furtado fez a conferência manual da versão final. Com a sala A já reservada das 14h às 15h no mesmo dia, ele verificou estes pedidos:
+
+| Novo pedido | Resultado esperado pela regra | Resposta do sistema |
+|---|---|---|
+| Das 13h às 16h | Recusar, pois o pedido inclui todo o período ocupado | `CONFLITO` |
+| Das 15h às 16h | Aceitar, pois a reserva anterior termina às 15h | `ACEITA` |
+
+Os dois resultados corresponderam ao esperado. Com base nessa conferência, a equipe aprovou a regra de conflito de horários. Asaph registrou a revisão da versão já integrada no commit `b22cca0`. O planejamento inicial integra a demonstração do fluxo HITL.
+
+Para consultar o registro da revisão:
 
 ```
-git log --oneline --graph --all
+git show b22cca0 -- README.md
 ```
 
-O arquivo de tarefa e a integração local representam a issue e o pull request na demonstração. Uma publicação remota e assinaturas de revisores ficam fora do registro produzido.
+## Métricas reais do experimento
+
+| Indicador | Resultado observado | Evidência |
+|---|---|---|
+| Testes automatizados aprovados na versão entregue | 12 de 12 (100%) | [Registro de execução](docs/execucao.txt) |
+| Pedidos com resposta esperada na conferência manual | 2 de 2 (100%) | Revisão de Asaph, commit `b22cca0` |
+| Detecção do defeito introduzido na cópia experimental | Os cinco testes iniciais passaram. O primeiro teste complementar detectou o conflito e interrompeu a execução. | [Registro da cópia experimental](docs/controle.txt) |
+
+Os percentuais descrevem os casos executados. A equipe realizou a revisão sem cronometrar as etapas.
+
+### Tempo de execução e rendimento dos testes
+
+Foram cronometradas cinco rodadas em Linux com OpenJDK 21.0.13. Cada rodada começou com uma compilação em pasta vazia e executou as duas baterias em sequência. O cronômetro incluiu a inicialização de cada processo Java. Os 12 testes passaram em todas as rodadas.
+
+| Rodada | Compilação (ms) | 5 testes iniciais (ms) | 7 testes de revisão (ms) |
+|---|---:|---:|---:|
+| 1 | 460,1 | 37,9 | 45,6 |
+| 2 | 352,3 | 35,5 | 46,6 |
+| 3 | 342,7 | 33,3 | 36,2 |
+| 4 | 392,2 | 32,5 | 37,6 |
+| 5 | 350,5 | 38,1 | 37,5 |
+
+Em média, a compilação levou **379,6 ms** e a execução dos 12 testes levou **76,2 ms**. A taxa observada foi de **157,6 testes por segundo**, calculada dividindo 60 execuções de teste pelo tempo acumulado das duas baterias nas cinco rodadas. O cálculo exclui a compilação.
+
+Essa taxa descreve a velocidade de verificação automática neste ambiente. O tempo de implementação e o da revisão humana ficaram sem registro, por isso a produtividade da equipe em entregas por hora permanece desconhecida.
 
 ## Reproduzir o experimento com defeito
 Em uma cópia separada da pasta extraída, execute `git apply docs/variante.patch`. Repita a compilação e os dois comandos de teste. A segunda bateria deve encerrar com “esperado CONFLITO, obtido ACEITA”. A pasta original continua pronta para apresentar o funcionamento correto.
@@ -54,8 +86,4 @@ Em uma cópia separada da pasta extraída, execute `git apply docs/variante.patc
 ## Roteiro para apresentar em três pessoas
 1. **Pessoa 1 — problema e primeira decisão.** “Duas turmas querem usar a mesma sala. O grupo precisa decidir até uma coisa aparentemente simples: se uma aula acaba às três, a outra pode começar às três? Neste cenário, pode. Essa decisão vira uma regra escrita antes de o agente programar.” Abra a tarefa e mostre o plano.
 2. **Pessoa 2 — implementação.** “O agente recebeu a tarefa de comparar sala, dia e horário. Vamos reservar das duas às três, tentar reservar da uma às quatro e, por fim, tentar das três às quatro.” Execute o exemplo e peça à turma que preveja a última resposta.
-3. **Pessoa 3 — conferência e segunda decisão.** “Os cinco testes iniciais passaram até numa cópia que continha um erro. O pedido da uma às quatro revelou a falha porque envolve toda a reserva existente. É esse tipo de evidência que o revisor precisa considerar antes de aprovar a integração.” Mostre os dois registros de execução e identifique o defeito deliberado e as aprovações assumidas.
-
-Revisão do grupo
-Em 24/11/26 , Asaph ferreira testou a sala A, já reservada das 14h às 15h. Ao tentar reservar das 13h às 16h, o sistema mostrou CONFLITO. Ao tentar reservar das 15h às 16h, mostrou ACEITO. Com base nisso, o grupo decidiu aprovar a regra.
-
+3. **Pessoa 3 — conferência e segunda decisão.** “Os cinco testes iniciais passaram até numa cópia que continha um erro. O pedido da uma às quatro revelou a falha porque envolve toda a reserva existente. É esse tipo de evidência que o revisor precisa considerar antes de aprovar a integração.” Mostre as saídas das duas baterias e o commit da revisão feita por Asaph.
