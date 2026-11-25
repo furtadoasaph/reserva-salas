@@ -83,7 +83,3 @@ Essa taxa descreve a velocidade de verificação automática neste ambiente. O t
 ## Reproduzir o experimento com defeito
 Em uma cópia separada da pasta extraída, execute `git apply docs/variante.patch`. Repita a compilação e os dois comandos de teste. A segunda bateria deve encerrar com “esperado CONFLITO, obtido ACEITA”. A pasta original continua pronta para apresentar o funcionamento correto.
 
-## Roteiro para apresentar em três pessoas
-1. **Pessoa 1 — problema e primeira decisão.** “Duas turmas querem usar a mesma sala. O grupo precisa decidir até uma coisa aparentemente simples: se uma aula acaba às três, a outra pode começar às três? Neste cenário, pode. Essa decisão vira uma regra escrita antes de o agente programar.” Abra a tarefa e mostre o plano.
-2. **Pessoa 2 — implementação.** “O agente recebeu a tarefa de comparar sala, dia e horário. Vamos reservar das duas às três, tentar reservar da uma às quatro e, por fim, tentar das três às quatro.” Execute o exemplo e peça à turma que preveja a última resposta.
-3. **Pessoa 3 — conferência e segunda decisão.** “Os cinco testes iniciais passaram até numa cópia que continha um erro. O pedido da uma às quatro revelou a falha porque envolve toda a reserva existente. É esse tipo de evidência que o revisor precisa considerar antes de aprovar a integração.” Mostre as saídas das duas baterias e o commit da revisão feita por Asaph.
